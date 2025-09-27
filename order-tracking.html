@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracking - FoodHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-utensils me-2"></i>FoodHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="menu.html">Menu</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="fas fa-shopping-cart me-1"></i>Cart
+                            <span class="badge bg-warning text-dark ms-1" id="cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="order-tracking.html">Track Order</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tracking Header -->
+    <section class="tracking-header bg-primary text-white py-5 mt-5">
+        <div class="container">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-map-marker-alt me-3"></i>Track Your Order
+            </h1>
+            <p class="lead">Stay updated on your order status in real-time</p>
+        </div>
+    </section>
+
+    <!-- Order Lookup -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center mb-4">
+                                <i class="fas fa-search me-2"></i>Find Your Order
+                            </h5>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" 
+                                       placeholder="Enter Order ID (e.g., FH123456)" 
+                                       id="order-id-input">
+                                <button class="btn btn-primary btn-lg" onclick="trackOrder()">
+                                    <i class="fas fa-search me-1"></i>Track
+                                </button>
+                            </div>
+                            <div class="text-center mt-3">
+                                <small class="text-muted">Order ID can be found in your confirmation email</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Status -->
+    <section class="py-5">
+        <div class="container">
+            <div id="order-not-found" class="text-center text-muted">
+                <i class="fas fa-clipboard-list fa-4x mb-3"></i>
+                <h4>Enter your order ID to track your order</h4>
+                <p>You'll see real-time updates on your order status here</p>
+            </div>
+
+            <div id="order-details" class="row" style="display: none;">
+                <!-- Order Information -->
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Order Details
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <strong>Order ID:</strong>
+                                <span id="display-order-id" class="ms-2"></span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Restaurant:</strong>
+                                <span id="display-restaurant" class="ms-2"></span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Order Time:</strong>
+                                <span id="display-order-time" class="ms-2"></span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Estimated Delivery:</strong>
+                                <span id="display-delivery-time" class="ms-2 text-primary"></span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Total:</strong>
+                                <span id="display-total" class="ms-2 fw-bold"></span>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Delivery Address:</strong>
+                                <div id="display-address" class="ms-2 text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Driver Information -->
+                    <div class="card mt-4" id="driver-info" style="display: none;">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-user me-2"></i>Delivery Driver
+                            </h6>
+                        </div>
+                        <div class="card-body text-center">
+                            <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150" 
+                                 alt="Driver" class="rounded-circle mb-2" width="60" height="60">
+                            <h6 id="driver-name">Mike Johnson</h6>
+                            <p class="text-muted mb-2" id="driver-phone">+1 (555) 987-6543</p>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-phone me-1"></i>Call Driver
+                                </button>
+                                <button class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-comment me-1"></i>Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Tracking -->
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-route me-2"></i>Order Progress
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Status Timeline -->
+                            <div class="tracking-timeline" id="tracking-timeline">
+                                <!-- Timeline items will be loaded here -->
+                            </div>
+
+                            <!-- Current Status -->
+                            <div class="mt-4 p-4 bg-light rounded">
+                                <div class="d-flex align-items-center">
+                                    <div class="status-icon me-3" id="current-status-icon">
+                                        <i class="fas fa-clock text-warning"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1" id="current-status-title">Order Confirmed</h6>
+                                        <p class="mb-0 text-muted" id="current-status-description">
+                                            Your order has been received and is being prepared
+                                        </p>
+                                        <small class="text-muted" id="current-status-time">2:30 PM</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Map (Placeholder) -->
+                            <div class="mt-4">
+                                <h6><i class="fas fa-map me-2"></i>Live Tracking</h6>
+                                <div class="bg-light rounded p-4 text-center" style="height: 200px;">
+                                    <div class="d-flex align-items-center justify-content-center h-100">
+                                        <div id="map-placeholder">
+                                            <i class="fas fa-map-marker-alt fa-3x text-primary mb-2"></i>
+                                            <br>
+                                            <span class="text-muted">Live map will show when order is out for delivery</span>
+                                        </div>
+                                        <div id="live-map" style="display: none;">
+                                            <i class="fas fa-truck fa-2x text-success"></i>
+                                            <p class="mt-2 mb-0">Your driver is 5 minutes away!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Orders -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h3 class="text-center mb-5">Recent Orders</h3>
+            <div class="row" id="recent-orders">
+                <!-- Recent orders will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h5><i class="fas fa-utensils me-2"></i>FoodHub</h5>
+                    <p class="text-light">Your favorite food delivery service. Fresh, fast, and delicious meals delivered to your door.</p>
+                </div>
+                <div class="col-lg-2">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-light text-decoration-none">Home</a></li>
+                        <li><a href="menu.html" class="text-light text-decoration-none">Menu</a></li>
+                        <li><a href="cart.html" class="text-light text-decoration-none">Cart</a></li>
+                        <li><a href="order-tracking.html" class="text-light text-decoration-none">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h6>Contact Info</h6>
+                    <p class="text-light mb-1"><i class="fas fa-phone me-2"></i>+1 (555) 123-4567</p>
+                    <p class="text-light mb-1"><i class="fas fa-envelope me-2"></i>info@foodhub.com</p>
+                    <p class="text-light"><i class="fas fa-map-marker-alt me-2"></i>123 Food Street, City</p>
+                </div>
+                <div class="col-lg-3">
+                    <h6>Follow Us</h6>
+                    <div class="social-links">
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="text-light mb-0">&copy; 2024 FoodHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
